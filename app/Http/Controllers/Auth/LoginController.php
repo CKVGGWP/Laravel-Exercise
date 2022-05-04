@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function index()
     {
         return view('login.login');
@@ -21,17 +24,10 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if (!auth()->attempt($request->only('username', 'password'))) {
+        if (!auth()->attempt($request->only('username', 'password'), $request->remember)) {
             return back()->with('status', 'Invalid Credentials');
         }
 
         return redirect()->route('dashboard');
-    }
-
-    public function logout(Request $request)
-    {
-        $request->session()->flush();
-
-        return redirect()->route('home');
     }
 }

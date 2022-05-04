@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Post\PostLikeController;
 use App\Http\Controllers\Dashboard\DashboardController;
 
 /*
@@ -26,8 +28,12 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('loginForm');
 
 Route::get('/post', [PostController::class, 'index'])->name('post');
+Route::post('/post', [PostController::class, 'store'])->name('storePost');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/post/{post}/likes', [PostLikeController::class, 'store'])->name('post.likes');
+Route::delete('/post/{post}/likes', [PostLikeController::class, 'unlike'])->name('post.likes');
+
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('home.home');
